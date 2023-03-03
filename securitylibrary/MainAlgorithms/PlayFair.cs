@@ -10,15 +10,14 @@ namespace SecurityLibrary
     {
         public string Decrypt(string cipherText, string key)
         {
-            string s = constructMatrix(ref key);
-            return s;
+            throw new NotImplementedException();
         }
 
         public string Encrypt(string plainText, string key)
         {
             throw new NotImplementedException();
         }
-        private string constructMatrix(ref string key)
+        private void constructMatrix(ref string key)
         {
             byte row=0, col=0;
             int index;
@@ -53,8 +52,6 @@ namespace SecurityLibrary
                 }
                 reset(ref row,ref col);
             }
-            string s = "";
-            return s;
         }
         private void reset(ref byte row, ref byte col)
         {
