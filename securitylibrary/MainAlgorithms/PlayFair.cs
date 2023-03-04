@@ -9,7 +9,7 @@ namespace SecurityLibrary
     public class PlayFair : ICryptographic_Technique<string, string>
     {
         private char[,] matrix;
-        private List<KeyValuePair<byte, byte>> matrixInverse;
+        private Dictionary<char, KeyValuePair<byte, byte>>matrixInverse;
         public string Decrypt(string cipherText, string key)
         {
             throw new NotImplementedException();
@@ -18,16 +18,41 @@ namespace SecurityLibrary
         public string Encrypt(string plainText, string key)
         {
             string cipherText = "";
+            int index;
+            char firstLetter, secondLetter;
             constructMatrix(ref key, ref matrix, ref matrixInverse);
+            plainText = plainText.Replace('j', 'i');
+            for (index = 0; index < plainText.Length - 1; index+=2)
+            {
+                firstLetter = plainText[index];
+                secondLetter = plainText[index + 1];
+                if (plainText[index] == plainText[index + 1])
+                {
+                    secondLetter = 'x';
+                }
+                if (matrixInverse[firstLetter].Key== matrixInverse[secondLetter].Key)
+                {
+                    cipherText += getValues(matrixInverse[firstLetter],matrixInverse[secondLetter], horizontalCircularArray);
+                }
+                else if (matrixInverse[firstLetter].Value == matrixInverse[secondLetter].Value)
+                {
+                    cipherText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], verticalCircularArray);
+                }
+                else
+                {
+                    cipherText += getIntersection(matrixInverse[firstLetter], matrixInverse[secondLetter]);
+                }
+                
+            }
             return cipherText.ToUpper();
         }
-        private void constructMatrix(ref string key, ref char[,] matrix, ref List<KeyValuePair<byte, byte>> matrixInverse)
+        private void constructMatrix(ref string key, ref char[,] matrix, ref Dictionary<char, KeyValuePair<byte, byte>> matrixInverse)
         {
             byte row = 0, col = 0;
             int index;
             bool[] alphabet = new bool[26];
             matrix = new char[5, 5];
-            matrixInverse = new List<KeyValuePair<byte, byte>>(25);
+            matrixInverse = new Dictionary<char, KeyValuePair<byte, byte>>();
             for (int size = 0; size < key.Length; size++)
             {
                 index = (int)key[size] - 97;
@@ -35,7 +60,7 @@ namespace SecurityLibrary
                 {
                     alphabet[index] = true;
                     matrix[row, col] = key[size];
-                    matrixInverse[index] = new KeyValuePair<byte, byte>(row, col);
+                    matrixInverse.Add(key[size],new KeyValuePair<byte, byte>(row, col));
                     if (key[size] == 'i')
                     {
                         alphabet[9] = true;
@@ -49,7 +74,7 @@ namespace SecurityLibrary
                 if (alphabet[index] == false)
                 {
                     matrix[row, col] = (char)(index + 97);
-                    matrixInverse[index] = new KeyValuePair<byte, byte>(row, col);
+                    matrixInverse.Add((char)(index + 97), new KeyValuePair<byte, byte>(row, col));
                     alphabet[index] = true;
 
                     if (index == 8)
@@ -70,7 +95,7 @@ namespace SecurityLibrary
                 col = 0;
             }
         }
-        private string getIntersection(ref KeyValuePair<byte, byte> firstLetter, ref KeyValuePair<byte, byte> secondLetter)
+        private string getIntersection(KeyValuePair<byte, byte> firstLetter,KeyValuePair<byte, byte> secondLetter)
         {
             string intersection = "";
             intersection += matrix[firstLetter.Key, secondLetter.Value];
@@ -79,15 +104,31 @@ namespace SecurityLibrary
         }
         private char verticalCircularArray(byte x, byte y)
         {
-            char value = matrix[((x % 4) + 4) % 4, y];
+            char value;
+            if (x + 1 > 4)
+            {
+                value = matrix[0, y];
+            }
+            else
+            {
+                value = matrix[x + 1, y];
+            }
             return value;
         }
         private char horizontalCircularArray(byte x, byte y)
         {
-            char value = matrix[x, ((y%4)+4)%4];
-            return value;
+            char value;
+            if (y + 1 > 4)
+            {
+               value = matrix[x, 0];
+            }
+            else
+            {
+               value = matrix[x, y+1];
+            }
+           return value;
         }
-        private string getValues(ref KeyValuePair<byte, byte> firstLetter, ref KeyValuePair<byte, byte> secondLetter, Func<byte, byte, char> circularArray)
+        private string getValues(KeyValuePair<byte, byte> firstLetter, KeyValuePair<byte, byte> secondLetter, Func<byte, byte, char> circularArray)
         {
             string value = "";
             value += circularArray(firstLetter.Key, firstLetter.Value);
