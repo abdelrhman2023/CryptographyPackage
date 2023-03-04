@@ -12,12 +12,46 @@ namespace SecurityLibrary
         private Dictionary<char, KeyValuePair<byte, byte>>matrixInverse;
         public string Decrypt(string cipherText, string key)
         {
-            throw new NotImplementedException();
+            cipherText = processText(cipherText, false);
+            constructMatrix(ref key, ref matrix, ref matrixInverse);
+            string plainText = "";
+            int index;
+            char firstLetter, secondLetter;
+            for (index = 0; index < cipherText.Length - 1; index += 2)
+            {
+                firstLetter = cipherText[index];
+                secondLetter = cipherText[index + 1];
+                if (matrixInverse[firstLetter].Key == matrixInverse[secondLetter].Key)
+                {
+                    plainText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], horizontalDecryptionCircularArray);
+                }
+                else if (matrixInverse[firstLetter].Value == matrixInverse[secondLetter].Value)
+                {
+                    plainText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], verticalDecryptionCircularArray);
+                }
+                else
+                {
+                    plainText += getIntersection(matrixInverse[firstLetter], matrixInverse[secondLetter]);
+                }
+
+            }
+            for(index=0;index< plainText.Length-2; index+=2)
+            {
+                if(plainText[index] == plainText[index + 2] && plainText[index + 1] == 'x')
+                {
+                    plainText = plainText.Remove(index+1, 1);
+                }
+            }
+            if (plainText[plainText.Length - 1] == 'x')
+            {
+                plainText = plainText.Remove(plainText.Length - 1, 1);
+            }
+            return plainText;
         }
 
         public string Encrypt(string plainText, string key)
         {
-            processPlainText(ref plainText);
+            plainText = processText(plainText,true);
             constructMatrix(ref key, ref matrix, ref matrixInverse);
             string cipherText = "";
             int index;
@@ -26,17 +60,13 @@ namespace SecurityLibrary
             {
                 firstLetter = plainText[index];
                 secondLetter = plainText[index + 1];
-                if (plainText[index] == plainText[index + 1]||(index== plainText.Length - 1&& plainText.Length%2!=0))
-                {
-                    secondLetter = 'x';
-                }
                 if (matrixInverse[firstLetter].Key== matrixInverse[secondLetter].Key)
                 {
-                    cipherText += getValues(matrixInverse[firstLetter],matrixInverse[secondLetter], horizontalCircularArray);
+                    cipherText += getValues(matrixInverse[firstLetter],matrixInverse[secondLetter], horizontalEncryptionCircularArray);
                 }
                 else if (matrixInverse[firstLetter].Value == matrixInverse[secondLetter].Value)
                 {
-                    cipherText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], verticalCircularArray);
+                    cipherText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], verticalEncryptionCircularArray);
                 }
                 else
                 {
@@ -46,21 +76,26 @@ namespace SecurityLibrary
             }
             return cipherText.ToUpper();
         }
-        private void processPlainText(ref string plainText)
+        private string processText(string text, bool isEncryption)
         {
-            plainText = plainText.Replace('j', 'i');
-            string x = "x";
-            for (int index = 0; index < plainText.Length-1; index+=2)
+            text = text.ToLower();
+            text = text.Replace('j', 'i');
+            if (isEncryption)
             {
-                if(plainText[index] == plainText[index + 1])
+                string x = "x";
+                for (int index = 0; index < text.Length - 1; index += 2)
                 {
-                    plainText = plainText.Insert(index + 1, x);
+                    if (text[index] == text[index + 1])
+                    {
+                        text = text.Insert(index + 1, x);
+                    }
+                }
+                if (text.Length % 2 != 0)
+                {
+                    text += x;
                 }
             }
-            if (plainText.Length%2 != 0)
-            {
-                plainText += x;
-            }
+            return text;
         }
         private void constructMatrix(ref string key, ref char[,] matrix, ref Dictionary<char, KeyValuePair<byte, byte>> matrixInverse)
         {
@@ -118,7 +153,7 @@ namespace SecurityLibrary
             intersection += matrix[secondLetter.Key, firstLetter.Value];
             return intersection;
         }
-        private char verticalCircularArray(byte x, byte y)
+        private char verticalEncryptionCircularArray(byte x, byte y)
         {
             char value;
             if (x + 1 > 4)
@@ -131,7 +166,7 @@ namespace SecurityLibrary
             }
             return value;
         }
-        private char horizontalCircularArray(byte x, byte y)
+        private char horizontalEncryptionCircularArray(byte x, byte y)
         {
             char value;
             if (y + 1 > 4)
@@ -151,6 +186,32 @@ namespace SecurityLibrary
             value += circularArray(secondLetter.Key, secondLetter.Value);
             return value;
         }
-
+        
+        private char horizontalDecryptionCircularArray(byte x, byte y)
+        {
+            char value;
+            if (y - 1 < 0)
+            {
+                value = matrix[x, 4];
+            }
+            else
+            {
+                value = matrix[x, y - 1];
+            }
+            return value;
+        }
+        private char verticalDecryptionCircularArray(byte x, byte y)
+        {
+            char value;
+            if (x - 1 < 0)
+            {
+                value = matrix[4, y];
+            }
+            else
+            {
+                value = matrix[x - 1, y];
+            }
+            return value;
+        }
     }
 }
