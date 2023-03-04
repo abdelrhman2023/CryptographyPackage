@@ -17,16 +17,16 @@ namespace SecurityLibrary
 
         public string Encrypt(string plainText, string key)
         {
+            processPlainText(ref plainText);
+            constructMatrix(ref key, ref matrix, ref matrixInverse);
             string cipherText = "";
             int index;
             char firstLetter, secondLetter;
-            constructMatrix(ref key, ref matrix, ref matrixInverse);
-            plainText = plainText.Replace('j', 'i');
-            for (index = 0; index < plainText.Length - 1; index+=2)
+            for (index = 0; index < plainText.Length-1; index+=2)
             {
                 firstLetter = plainText[index];
                 secondLetter = plainText[index + 1];
-                if (plainText[index] == plainText[index + 1])
+                if (plainText[index] == plainText[index + 1]||(index== plainText.Length - 1&& plainText.Length%2!=0))
                 {
                     secondLetter = 'x';
                 }
@@ -45,6 +45,22 @@ namespace SecurityLibrary
                 
             }
             return cipherText.ToUpper();
+        }
+        private void processPlainText(ref string plainText)
+        {
+            plainText = plainText.Replace('j', 'i');
+            string x = "x";
+            for (int index = 0; index < plainText.Length-1; index+=2)
+            {
+                if(plainText[index] == plainText[index + 1])
+                {
+                    plainText = plainText.Insert(index + 1, x);
+                }
+            }
+            if (plainText.Length%2 != 0)
+            {
+                plainText += x;
+            }
         }
         private void constructMatrix(ref string key, ref char[,] matrix, ref Dictionary<char, KeyValuePair<byte, byte>> matrixInverse)
         {
