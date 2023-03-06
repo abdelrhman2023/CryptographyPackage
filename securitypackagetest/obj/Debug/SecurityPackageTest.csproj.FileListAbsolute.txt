@@ -44,3 +44,12 @@ D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\Secu
 D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CopyComplete
 D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
 D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityPackageTest\bin\Debug\SecurityPackageTest.dll
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityPackageTest\bin\Debug\SecurityPackageTest.pdb
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityPackageTest\bin\Debug\SecurityLibrary.dll
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityPackageTest\bin\Debug\SecurityLibrary.pdb
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.AssemblyReference.cache
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CoreCompileInputs.cache
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CopyComplete
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
