@@ -35,3 +35,12 @@ E:\Computer Science\Projects\Senior Year - Term 2\ComputerAndNetworkSecurityPack
 E:\Computer Science\Projects\Senior Year - Term 2\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CopyComplete
 E:\Computer Science\Projects\Senior Year - Term 2\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
 E:\Computer Science\Projects\Senior Year - Term 2\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\bin\Debug\SecurityPackageTest.dll
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\bin\Debug\SecurityPackageTest.pdb
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\bin\Debug\SecurityLibrary.dll
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\bin\Debug\SecurityLibrary.pdb
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.AssemblyReference.cache
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CoreCompileInputs.cache
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CopyComplete
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
