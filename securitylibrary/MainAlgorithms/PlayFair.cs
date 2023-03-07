@@ -12,91 +12,18 @@ namespace SecurityLibrary
         private Dictionary<char, KeyValuePair<byte, byte>>matrixInverse;
         public string Decrypt(string cipherText, string key)
         {
-            cipherText = processText(cipherText, false);
-            constructMatrix(ref key, ref matrix, ref matrixInverse);
-            string plainText = "";
-            int index;
-            char firstLetter, secondLetter;
-            for (index = 0; index < cipherText.Length - 1; index += 2)
-            {
-                firstLetter = cipherText[index];
-                secondLetter = cipherText[index + 1];
-                if (matrixInverse[firstLetter].Key == matrixInverse[secondLetter].Key)
-                {
-                    plainText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], horizontalDecryptionCircularArray);
-                }
-                else if (matrixInverse[firstLetter].Value == matrixInverse[secondLetter].Value)
-                {
-                    plainText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], verticalDecryptionCircularArray);
-                }
-                else
-                {
-                    plainText += getIntersection(matrixInverse[firstLetter], matrixInverse[secondLetter]);
-                }
-
-            }
-            for(index=0;index< plainText.Length-2; index+=2)
-            {
-                if(plainText[index] == plainText[index + 2] && plainText[index + 1] == 'x')
-                {
-                    plainText = plainText.Remove(index+1, 1);
-                    index--;
-                }
-            }
-            if (plainText[plainText.Length - 1] == 'x')
-            {
-                plainText = plainText.Remove(plainText.Length - 1, 1);
-            }
+            cipherText = cipherText.ToLower();
+            cipherText = cipherText.Replace('j', 'i');
+            string plainText = playFair(cipherText, key, horizontalDecryptionCircularArray, verticalDecryptionCircularArray);
+            postProcessText(ref plainText);
             return plainText;
         }
 
         public string Encrypt(string plainText, string key)
         {
-            plainText = processText(plainText,true);
-            constructMatrix(ref key, ref matrix, ref matrixInverse);
-            string cipherText = "";
-            int index;
-            char firstLetter, secondLetter;
-            for (index = 0; index < plainText.Length-1; index+=2)
-            {
-                firstLetter = plainText[index];
-                secondLetter = plainText[index + 1];
-                if (matrixInverse[firstLetter].Key== matrixInverse[secondLetter].Key)
-                {
-                    cipherText += getValues(matrixInverse[firstLetter],matrixInverse[secondLetter], horizontalEncryptionCircularArray);
-                }
-                else if (matrixInverse[firstLetter].Value == matrixInverse[secondLetter].Value)
-                {
-                    cipherText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], verticalEncryptionCircularArray);
-                }
-                else
-                {
-                    cipherText += getIntersection(matrixInverse[firstLetter], matrixInverse[secondLetter]);
-                }
-                
-            }
+            plainText = preProcessText(plainText);
+            string cipherText = playFair(plainText, key, horizontalEncryptionCircularArray, verticalEncryptionCircularArray);
             return cipherText.ToUpper();
-        }
-        private string processText(string text, bool isEncryption)
-        {
-            text = text.ToLower();
-            text = text.Replace('j', 'i');
-            if (isEncryption)
-            {
-                string x = "x";
-                for (int index = 0; index < text.Length - 1; index += 2)
-                {
-                    if (text[index] == text[index + 1])
-                    {
-                        text = text.Insert(index + 1, x);
-                    }
-                }
-                if (text.Length % 2 != 0)
-                {
-                    text += x;
-                }
-            }
-            return text;
         }
         private void constructMatrix(ref string key, ref char[,] matrix, ref Dictionary<char, KeyValuePair<byte, byte>> matrixInverse)
         {
@@ -112,7 +39,7 @@ namespace SecurityLibrary
                 {
                     alphabet[index] = true;
                     matrix[row, col] = key[size];
-                    matrixInverse.Add(key[size],new KeyValuePair<byte, byte>(row, col));
+                    matrixInverse.Add(key[size], new KeyValuePair<byte, byte>(row, col));
                     if (key[size] == 'i')
                     {
                         alphabet[9] = true;
@@ -147,6 +74,43 @@ namespace SecurityLibrary
                 col = 0;
             }
         }
+        private string preProcessText(string text)
+        {
+            text = text.ToLower();
+            text = text.Replace('j', 'i');
+
+            string x = "x";
+            for (int index = 0; index < text.Length - 1; index += 2)
+            {
+                if (text[index] == text[index + 1])
+                {
+                    text = text.Insert(index + 1, x);
+                }
+            }
+            if (text.Length % 2 != 0)
+            {
+                text += x;
+            }
+
+            return text;
+        }
+        private string postProcessText(ref string plainText)
+        {
+            for (int index = 0; index < plainText.Length - 2; index += 2)
+            {
+                if (plainText[index] == plainText[index + 2] && plainText[index + 1] == 'x')
+                {
+                    plainText = plainText.Remove(index + 1, 1);
+                    index--;
+                }
+            }
+            if (plainText[plainText.Length - 1] == 'x')
+            {
+                plainText = plainText.Remove(plainText.Length - 1, 1);
+            }
+            return plainText;
+        }
+ 
         private string getIntersection(KeyValuePair<byte, byte> firstLetter,KeyValuePair<byte, byte> secondLetter)
         {
             string intersection = "";
@@ -180,14 +144,19 @@ namespace SecurityLibrary
             }
            return value;
         }
-        private string getValues(KeyValuePair<byte, byte> firstLetter, KeyValuePair<byte, byte> secondLetter, Func<byte, byte, char> circularArray)
+        private char verticalDecryptionCircularArray(byte x, byte y)
         {
-            string value = "";
-            value += circularArray(firstLetter.Key, firstLetter.Value);
-            value += circularArray(secondLetter.Key, secondLetter.Value);
+            char value;
+            if (x - 1 < 0)
+            {
+                value = matrix[4, y];
+            }
+            else
+            {
+                value = matrix[x - 1, y];
+            }
             return value;
         }
-        
         private char horizontalDecryptionCircularArray(byte x, byte y)
         {
             char value;
@@ -201,18 +170,38 @@ namespace SecurityLibrary
             }
             return value;
         }
-        private char verticalDecryptionCircularArray(byte x, byte y)
+        private string getValues(KeyValuePair<byte, byte> firstLetter, KeyValuePair<byte, byte> secondLetter, Func<byte, byte, char> circularArray)
         {
-            char value;
-            if (x - 1 < 0)
-            {
-                value = matrix[4, y];
-            }
-            else
-            {
-                value = matrix[x - 1, y];
-            }
+            string value = "";
+            value += circularArray(firstLetter.Key, firstLetter.Value);
+            value += circularArray(secondLetter.Key, secondLetter.Value);
             return value;
+        }
+        private string playFair(string text, string key, Func<byte, byte, char> horizontalCircularArray, Func<byte, byte, char> verticalCircularArray)
+        {
+            constructMatrix(ref key, ref matrix, ref matrixInverse);
+            string playFairText = "";
+            int index;
+            char firstLetter, secondLetter;
+            for (index = 0; index < text.Length - 1; index += 2)
+            {
+                firstLetter = text[index];
+                secondLetter = text[index + 1];
+                if (matrixInverse[firstLetter].Key == matrixInverse[secondLetter].Key)
+                {
+                    playFairText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], horizontalCircularArray);
+                }
+                else if (matrixInverse[firstLetter].Value == matrixInverse[secondLetter].Value)
+                {
+                    playFairText += getValues(matrixInverse[firstLetter], matrixInverse[secondLetter], verticalCircularArray);
+                }
+                else
+                {
+                    playFairText += getIntersection(matrixInverse[firstLetter], matrixInverse[secondLetter]);
+                }
+
+            }
+            return playFairText;
         }
     }
 }
