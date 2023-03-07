@@ -21,7 +21,7 @@ namespace SecurityLibrary
             }
 
             string lost = "";
-            
+
             for (char i = 'A'; i <= 'Z'; i++)
             {
                 if (!cipherText.Contains(i))
@@ -48,6 +48,8 @@ namespace SecurityLibrary
             }
 
             Console.WriteLine(key);
+            Console.WriteLine(lost);
+
             return key.ToLower();
         }
 

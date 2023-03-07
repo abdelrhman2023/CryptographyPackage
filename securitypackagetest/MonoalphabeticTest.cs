@@ -107,6 +107,9 @@ namespace SecurityPackageTest
         public void MonoTestAnalysisNaive3()
         {
             Regex regex = new Regex("isy.k.{2}ux.{2}zqmct.lofn.{3}a.");
+                                   //isyvkjruxedzqmctplofnbwgah
+                                  // ISYBKDEUXGHZQMCTJLOFNPRVAW
+                                  // B DE GH J PRV W
 
             Monoalphabetic algorithm = new Monoalphabetic();
             string key = algorithm.Analyse(mainPlain2, mainCipher2);
