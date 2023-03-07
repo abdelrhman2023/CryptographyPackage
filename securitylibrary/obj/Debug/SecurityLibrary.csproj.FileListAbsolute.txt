@@ -18,3 +18,15 @@ E:\Computer Science\Projects\Senior Year - Term 2\ComputerAndNetworkSecurityPack
 E:\Computer Science\Projects\Senior Year - Term 2\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.csproj.CoreCompileInputs.cache
 E:\Computer Science\Projects\Senior Year - Term 2\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.dll
 E:\Computer Science\Projects\Senior Year - Term 2\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityLibrary\bin\Debug\SecurityLibrary.dll
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityLibrary\bin\Debug\SecurityLibrary.pdb
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.csproj.AssemblyReference.cache
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.csproj.CoreCompileInputs.cache
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.dll
+D:\projects\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityLibrary\bin\Debug\SecurityLibrary.dll
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityLibrary\bin\Debug\SecurityLibrary.pdb
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.csproj.AssemblyReference.cache
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.csproj.CoreCompileInputs.cache
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.dll
+E:\FCIS\Cyber Security\package\ComputerAndNetworkSecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
