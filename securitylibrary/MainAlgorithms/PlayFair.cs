@@ -40,6 +40,7 @@ namespace SecurityLibrary
                 if(plainText[index] == plainText[index + 2] && plainText[index + 1] == 'x')
                 {
                     plainText = plainText.Remove(index+1, 1);
+                    index--;
                 }
             }
             if (plainText[plainText.Length - 1] == 'x')

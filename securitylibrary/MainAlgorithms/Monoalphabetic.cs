@@ -10,7 +10,46 @@ namespace SecurityLibrary
     {
         public string Analyse(string plainText, string cipherText)
         {
-            throw new NotImplementedException();
+            Dictionary<char, char> myDictionary = new Dictionary<char, char>();
+
+            cipherText = cipherText.ToUpper();
+            plainText = plainText.ToUpper();
+
+            for (int i = 0; i < plainText.Length; i++)
+            {
+                myDictionary[plainText[i]] = cipherText[i];
+            }
+
+            string lost = "";
+
+            for (char i = 'A'; i <= 'Z'; i++)
+            {
+                if (!cipherText.Contains(i))
+                {
+                    lost += i;
+                }
+            }
+
+
+            int idx = 0;
+            for (char i = 'A'; i <= 'Z'; i++)
+            {
+                if (!myDictionary.ContainsKey(i))
+                {
+                    myDictionary[i] = lost[idx++];
+                }
+            }
+
+            string key = "";
+
+            for (char i = 'A'; i <= 'Z'; i++)
+            {
+                key += myDictionary[i];
+            }
+
+            Console.WriteLine(key);
+            Console.WriteLine(lost);
+            return key.ToLower();
         }
 
         public string Decrypt(string cipherText, string key)
