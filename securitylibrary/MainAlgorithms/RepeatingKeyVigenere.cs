@@ -19,7 +19,7 @@ namespace SecurityLibrary
             constructMatrix(ref matrix);
             string keyStream = getKeyStream(ref key, ref cipherText);
             string plainText = null;
-            repeatingKeyVigenere(keyStream, cipherText.ToLower(), ref plainText);
+            repeatingKeyVigenereDecryptin(keyStream, cipherText.ToLower(), ref plainText);
             return plainText;
         }
 
@@ -28,7 +28,7 @@ namespace SecurityLibrary
             constructMatrix(ref matrix);
             string keyStream = getKeyStream(ref key,ref plainText);
             string cipherText = null;
-            repeatingKeyVigenere(keyStream,plainText,ref cipherText);
+            repeatingKeyVigenereEncryption(keyStream,plainText,ref cipherText);
             return cipherText.ToUpper();
         }
         private void constructMatrix(ref char [,] matrix)
@@ -69,7 +69,7 @@ namespace SecurityLibrary
             }
             return keyStream;
         }
-        private void repeatingKeyVigenere(string keyStream, string text, ref string output)
+        private void repeatingKeyVigenereEncryption(string keyStream, string text, ref string output)
         {
             int size, firstLetter, secondLetter,index;
             output = "";
@@ -80,7 +80,25 @@ namespace SecurityLibrary
                 secondLetter = (int)(keyStream[index] - 'a');
                 output += matrix[firstLetter, secondLetter];
             }
-            
+        }
+
+        private void repeatingKeyVigenereDecryptin(string keyStream, string text, ref string output)
+        {
+            int size, firstLetter, index,innerIndex;
+            output = "";
+            size = text.Length;
+            for (index = 0; index < size; index++)
+            {
+                firstLetter = (int)(keyStream[index] - 'a');
+                for (innerIndex = 0; innerIndex < 26; innerIndex++)
+                {
+                    if (matrix[firstLetter, innerIndex] == text[index])
+                    {
+                        output += (char)(innerIndex + 97);
+                        break;
+                    }
+                }
+            }
         }
     }
 }

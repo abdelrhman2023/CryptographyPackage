@@ -16,7 +16,10 @@ namespace SecurityLibrary
 
         public string Decrypt(string cipherText, string key)
         {
-            throw new NotImplementedException();
+            constructMatrix(ref matrix);
+            string plainText = null;
+            autoKeyVigenereDecryptin(key, cipherText.ToLower(), ref plainText);
+            return plainText;
         }
 
         public string Encrypt(string plainText, string key)
@@ -24,7 +27,7 @@ namespace SecurityLibrary
             constructMatrix(ref matrix);
             string keyStream = getKeyStream(ref key, ref plainText);
             string cipherText = null;
-            autoKeyVigenere(keyStream, plainText, ref cipherText);
+            autoKeyVigenereEncryption(keyStream, plainText, ref cipherText);
             return cipherText.ToUpper();
         }
         private void constructMatrix(ref char[,] matrix)
@@ -65,7 +68,7 @@ namespace SecurityLibrary
             }
             return keyStream;
         }
-        private void autoKeyVigenere(string keyStream, string text, ref string output)
+        private void autoKeyVigenereEncryption(string keyStream, string text, ref string output)
         {
             int size, firstLetter, secondLetter, index;
             output = "";
@@ -77,6 +80,28 @@ namespace SecurityLibrary
                 output += matrix[firstLetter, secondLetter];
             }
 
+        }
+        private void autoKeyVigenereDecryptin(string keyStream, string text, ref string output)
+        {
+            int size, firstLetter, index, innerIndex;
+            output = "";
+            size = text.Length;
+            for (index = 0; index < size; index++)
+            {
+                firstLetter = (int)(keyStream[index] - 'a');
+                for (innerIndex = 0; innerIndex < 26; innerIndex++)
+                {
+                    if (matrix[firstLetter, innerIndex] == text[index])
+                    {
+                        output += (char)(innerIndex + 97);
+                        if (keyStream.Length != text.Length)
+                        {
+                            keyStream += (char)(innerIndex + 97);
+                        }
+                        break;
+                    }
+                }
+            }
         }
     }
 }
