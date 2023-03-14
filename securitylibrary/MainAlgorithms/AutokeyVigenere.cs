@@ -11,7 +11,10 @@ namespace SecurityLibrary
         char[,] matrix;
         public string Analyse(string plainText, string cipherText)
         {
-            throw new NotImplementedException();
+            constructMatrix(ref matrix);
+            string key = null;
+            autoKeyVigenereEncryption(plainText, cipherText.ToLower(), ref key);
+            return key;
         }
 
         public string Decrypt(string cipherText, string key)

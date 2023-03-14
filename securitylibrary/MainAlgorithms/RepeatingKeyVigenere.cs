@@ -8,10 +8,15 @@ namespace SecurityLibrary
 {
     public class RepeatingkeyVigenere : ICryptographicTechnique<string, string>
     {
-        char [,] matrix;
+        char[,] matrix;
+        
         public string Analyse(string plainText, string cipherText)
         {
-            throw new NotImplementedException();
+            constructMatrix(ref matrix);
+            string keyStream = null;
+            repeatingKeyVigenereDecryptin(plainText, cipherText.ToLower(), ref keyStream);
+            string key = postProcessKeyStream(ref keyStream);
+            return key;
         }
 
         public string Decrypt(string cipherText, string key)
@@ -22,7 +27,6 @@ namespace SecurityLibrary
             repeatingKeyVigenereDecryptin(keyStream, cipherText.ToLower(), ref plainText);
             return plainText;
         }
-
         public string Encrypt(string plainText, string key)
         {
             constructMatrix(ref matrix);
@@ -81,7 +85,6 @@ namespace SecurityLibrary
                 output += matrix[firstLetter, secondLetter];
             }
         }
-
         private void repeatingKeyVigenereDecryptin(string keyStream, string text, ref string output)
         {
             int size, firstLetter, index,innerIndex;
@@ -99,6 +102,38 @@ namespace SecurityLibrary
                     }
                 }
             }
+        }
+        
+        private string postProcessKeyStream(ref string keyStream)
+        {
+            string key = "";
+            int index;
+            var foundInexes = new List<int>();
+            bool isMatched;
+            for (index = keyStream.IndexOf(keyStream[0]); index > -1; index = keyStream.IndexOf(keyStream[0], index + 1))
+            {
+                foundInexes.Add(index);
+            }
+            for (index=1;index<foundInexes.Count;index++)
+            {
+                isMatched = true;
+                for(int firstLetter = 0; firstLetter < foundInexes[index]; firstLetter++)
+                {
+                    if (keyStream[firstLetter] != keyStream[foundInexes[index] + firstLetter])
+                    {
+                        isMatched = false;
+                    }
+                }
+                if (isMatched)
+                {
+                    for(int firstLetter = 0; firstLetter < foundInexes[index]; firstLetter++)
+                    {
+                        key+= keyStream[firstLetter];
+                    }
+                    break;
+                }
+            }
+            return key;
         }
     }
 }
