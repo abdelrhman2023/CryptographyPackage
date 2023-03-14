@@ -121,28 +121,14 @@ namespace SecurityLibrary
         private char verticalEncryptionCircularArray(byte x, byte y)
         {
             char value;
-            if (x + 1 > 4)
-            {
-                value = matrix[0, y];
-            }
-            else
-            {
-                value = matrix[x + 1, y];
-            }
+            value = matrix[(x+1)%5, y];
             return value;
         }
         private char horizontalEncryptionCircularArray(byte x, byte y)
         {
             char value;
-            if (y + 1 > 4)
-            {
-               value = matrix[x, 0];
-            }
-            else
-            {
-               value = matrix[x, y+1];
-            }
-           return value;
+            value = matrix[x, (y+1)%5];
+            return value;
         }
         private char verticalDecryptionCircularArray(byte x, byte y)
         {
