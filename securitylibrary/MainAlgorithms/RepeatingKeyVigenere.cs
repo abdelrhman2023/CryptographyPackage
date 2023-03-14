@@ -8,11 +8,14 @@ namespace SecurityLibrary
 {
     public class RepeatingkeyVigenere : ICryptographicTechnique<string, string>
     {
-        char[,] matrix;
+       private char[,] matrix;
+        public RepeatingkeyVigenere()
+        {
+            constructMatrix(ref matrix);
+        }
         
         public string Analyse(string plainText, string cipherText)
         {
-            constructMatrix(ref matrix);
             string keyStream = null;
             repeatingKeyVigenereDecryptin(plainText, cipherText.ToLower(), ref keyStream);
             string key = postProcessKeyStream(ref keyStream);
@@ -21,7 +24,6 @@ namespace SecurityLibrary
 
         public string Decrypt(string cipherText, string key)
         {
-            constructMatrix(ref matrix);
             string keyStream = getKeyStream(ref key, ref cipherText);
             string plainText = null;
             repeatingKeyVigenereDecryptin(keyStream, cipherText.ToLower(), ref plainText);
@@ -29,7 +31,6 @@ namespace SecurityLibrary
         }
         public string Encrypt(string plainText, string key)
         {
-            constructMatrix(ref matrix);
             string keyStream = getKeyStream(ref key,ref plainText);
             string cipherText = null;
             repeatingKeyVigenereEncryption(keyStream,plainText,ref cipherText);
