@@ -15,26 +15,42 @@ namespace SecurityLibrary
         {
             List<int> Key = new List<int>();
 
-            for (int index = 0, count = 2; index < 2; index++, count += 2)
+            for (int randKey1 = 0; randKey1 < 26; randKey1++)
             {
-                for (int res1 = 0; res1 < 26; res1++)
+                for (int randKey2 = 0; randKey2 < 26; randKey2++)
                 {
-                    for (int res2 = 0; res2 < 26; res2++)
+                    for(int randKey3 = 0;randKey3 < 26; randKey3++)
                     {
-                        if (((res1 * plainText[0]) + (res2 * plainText[1])) % 26 == cipherText[index] &&
-                            ((res1 * plainText[2]) + (res2 * plainText[3])) % 26 == cipherText[index + 2])
+                        for (int randKey4 = 0; randKey4 < 26; randKey4++)
                         {
-                            Key.Add(res1);
-                            Key.Add(res2);
-                            break;
+
+                            if (((randKey1 * plainText[0]) + (randKey2 * plainText[1])) % 26 == cipherText[0] )
+                            {
+                                if(((randKey1 * plainText[2]) + (randKey2 * plainText[3])) % 26 == cipherText[2])
+                                {
+                                    if(((randKey3 * plainText[0]) + (randKey4 * plainText[1])) % 26 == cipherText[1])
+                                    {
+                                        if(((randKey3 * plainText[2]) + (randKey4 * plainText[3])) % 26 == cipherText[3])
+                                        {
+                                            Key.Add(randKey1);
+                                            Key.Add(randKey2);
+                                            Key.Add(randKey3);
+                                            Key.Add(randKey4);
+
+                                        }
+                                    }
+                                }
+                            }
+
                         }
                     }
-                    if (Key.Count == count)
-                        break;
+
                 }
             }
             if (Key.Count < 4)
+            {
                 throw new InvalidAnlysisException();
+            }
 
             return Key;
         }
@@ -267,7 +283,31 @@ namespace SecurityLibrary
 
         public List<int> Analyse3By3Key(List<int> plainText, List<int> cipherText)
         {
-            throw new NotImplementedException();
+            List<int> Key = new List<int>();
+
+            for (int i =0; i<3;i++)
+            {
+                for (int randKey1 = 0; randKey1 < 26; randKey1++)
+                {
+                    for (int randKey2 = 0; randKey2 < 26; randKey2++)
+                    {
+                        for (int randKey3 = 0; randKey3 < 26; randKey3++)
+                        {
+                            if (
+                               ((randKey1 * plainText[0]) + (randKey2 * plainText[1]) + (randKey3 * plainText[2])) % 26 == cipherText[i]&&
+                               ((randKey1 * plainText[3]) + (randKey2 * plainText[4]) + (randKey3 * plainText[5])) % 26 == cipherText[i+3]&&
+                               ((randKey1 * plainText[6]) + (randKey2 * plainText[7]) + (randKey3 * plainText[8])) % 26 == cipherText[i+6]
+                               )
+                            {
+                                Key.Add(randKey1);
+                                Key.Add(randKey2);
+                                Key.Add(randKey3);
+                            }
+                        }
+                    }
+                }
+            }
+            return Key;
         }
 
         private int[,] matrix_Trans(int[,] matrix, int m)
