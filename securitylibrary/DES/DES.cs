@@ -20,5 +20,9 @@ namespace SecurityLibrary.DES
         {
             throw new NotImplementedException();
         }
+        private string XOR (string key, string text)
+        {
+
+        }
     }
 }
