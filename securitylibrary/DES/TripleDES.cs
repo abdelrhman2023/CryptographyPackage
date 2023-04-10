@@ -13,7 +13,7 @@ namespace SecurityLibrary.DES
     {
         private DES des = null;
         private string stage_one, stage_two,result;
-        TripleDES()
+        public TripleDES()
         {
             des = new DES();
         }
