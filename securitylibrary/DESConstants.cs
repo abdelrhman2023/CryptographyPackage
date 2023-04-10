@@ -39,7 +39,7 @@ namespace SecurityLibrary
            {'8',"1000"},{'9',"1001"},{'A',"1010"},{'B',"1011"},{'C',"1100"},{'D',"1101"},{'E',"1110"},
            {'F',"1111"}};
         
-        public static readonly int[] initialPermutation = new int[64] {
+        public static readonly byte[] initialPermutation = new byte[64] {
            58, 50, 42, 34, 26, 18, 10, 2,
            60, 52, 44, 36, 28, 20, 12, 4,
            62, 54, 46, 38, 30, 22, 14, 6,
@@ -60,6 +60,26 @@ namespace SecurityLibrary
            34, 2, 42, 10, 50, 18, 58, 26,
            33, 1, 41, 9, 49, 17, 57, 25
            };
+
+        public static readonly byte[] expansionTable = new byte[48]
+        {
+        32, 1, 2, 3, 4, 5,
+        4, 5, 6, 7, 8, 9,
+        8, 9, 10, 11, 12, 13,
+        12, 13, 14, 15, 16, 17,
+        16, 17, 18, 19, 20, 21,
+        20, 21, 22, 23, 24, 25,
+        24, 25, 26, 27, 28, 29,
+        28, 29, 30, 31, 32, 1
+        };
+
+        public static readonly byte[] permutationTable = new byte[32]
+        {
+        16, 7, 20, 21, 29, 12, 28, 17,
+        1, 15, 23, 26, 5, 18, 31, 10,
+        2, 8, 24, 14, 32, 27, 3, 9,
+        19, 13, 30, 6, 22, 11, 4, 25
+        };
 
         private static readonly byte[,,] sboxes = new byte[8, 4, 16]
         {
