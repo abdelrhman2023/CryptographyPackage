@@ -24,14 +24,23 @@ namespace SecurityLibrary.DES
         public override string Encrypt(string plainText, string key)
         {
             string cipherText = null;
-            StringBuilder left = new StringBuilder(), right = new StringBuilder();
+            string left = "", right = "";
+            string preCipher = "";
             generateKeys(key);
             string binaryText =hexaToBinary(plainText);
-            binaryText = permutationChoice(plainText,DESConstants.initialPermutation);
+            binaryText = permutationChoice(binaryText,DESConstants.initialPermutation);
             splitString(binaryText, ref left, ref right);
+             
+            for (int round = 0; round < 16; round++)
+            {
+                manglerFunction(ref right, ref left,ref round);
+            }
+            preCipher = right;
+            preCipher += left;
+            cipherText = permutationChoice(preCipher, DESConstants.inverseInitialPermutation);
             return cipherText;
         }
-        private string XOR (ref string key,ref string text)
+        private string XOR (string key,ref string text)
         {
            StringBuilder xor = new StringBuilder();
             for (int index = 0;index < text.Length; index++)
@@ -50,12 +59,14 @@ namespace SecurityLibrary.DES
         private byte binaryToDecimal(string binary)
         {
             byte number = 0;
-            for (int index = binary.Length - 1; index >= 0; index--)
+            int pow = binary.Length - 1;
+            for (int index = 0; index <binary.Length; index++)
             {
                 if (binary[index] == '1')
                 {
-                    number += (byte)Math.Pow(2, index);
+                    number += (byte)Math.Pow(2, pow);
                 }
+                pow--;
             }
             return number;
 
@@ -64,7 +75,7 @@ namespace SecurityLibrary.DES
         {
             string binaryKey = hexaToBinary(key);
             string _56BitKey = permutationChoice(binaryKey,DESConstants.pc1);
-            StringBuilder c = new StringBuilder(), d = new StringBuilder();
+            string c = "", d = "";
             int index; string subKey;
             splitString(_56BitKey, ref c, ref d);
             for (index = 0; index < 16; index++)
@@ -103,24 +114,41 @@ namespace SecurityLibrary.DES
             }
             return permutatedChoice.ToString();
         }
-        private void splitString(string str,ref StringBuilder left, ref StringBuilder right)
+        private void splitString(string str,ref string left, ref string right)
         {
             int size = str.Length/2;
             for (int index = 0; index < size; index++)
             {
-                left.Append(str[index]);
-                right.Append(str[index + size]);
+                left += str[index];
+                right += str[index + size];
             }
         }
-        private void manglerFunction(ref string right, ref string left, ref string subKey)
+        private void manglerFunction(ref string right, ref string left, ref int subKeyIndex)
         {
-            string expandedText = permutationChoice(right, DESConstants.expansionTable);
-            string xor = XOR(ref subKey, ref right);
-            string sboxes = null;
+            string expandedRight = permutationChoice(right, DESConstants.expansionTable);
+            string xor = XOR(_16SubKeys[subKeyIndex], ref expandedRight);
+            string sboxes = sboxReduction(xor);
             string permutatedRight = permutationChoice(sboxes, DESConstants.permutationTable);
-            string leftXORRight = XOR(ref left, ref right);
+            string leftXORRight = XOR(left, ref permutatedRight);
             left = right;
             right = leftXORRight;
+        }
+        private string sboxReduction(string text)
+        {
+            StringBuilder sboxOutput32Bit = new StringBuilder();
+            byte row, column,result,sboxIndex=0;
+            string strRow,strColumn;
+            for (int index=0;index< text.Length; index += 8)
+            {
+                strColumn = text.Substring(index+1, 4);
+                strRow = text[index] + text[index+5].ToString();
+                row = binaryToDecimal(strRow);
+                column = binaryToDecimal(strColumn);
+                result = DESConstants.sboxes[sboxIndex,row,column];
+                sboxOutput32Bit.Append(DESConstants.decimalToBinaryMap[result]);
+                sboxIndex++;
+            }
+            return sboxOutput32Bit.ToString();
         }
     }
 }

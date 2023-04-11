@@ -38,7 +38,12 @@ namespace SecurityLibrary
            { '2', "0010" } , { '3', "0011" } , { '4', "0100" },{'5',"0101"},{'6',"0110"},{'7',"0111"},
            {'8',"1000"},{'9',"1001"},{'A',"1010"},{'B',"1011"},{'C',"1100"},{'D',"1101"},{'E',"1110"},
            {'F',"1111"}};
-        
+
+        public static readonly Dictionary<byte, string> decimalToBinaryMap = new Dictionary<byte, string> {{0,"0000"}, { 1, "0001" } ,
+           { 2, "0010" } , { 3, "0011" } , { 4, "0100" },{5,"0101"},{6,"0110"},{7,"0111"},
+           {8,"1000"},{9,"1001"},{10,"1010"},{11,"1011"},{12,"1100"},{13,"1101"},{14,"1110"},
+           {15,"1111"}};
+
         public static readonly byte[] initialPermutation = new byte[64] {
            58, 50, 42, 34, 26, 18, 10, 2,
            60, 52, 44, 36, 28, 20, 12, 4,
@@ -50,7 +55,7 @@ namespace SecurityLibrary
            63, 55, 47, 39, 31, 23, 15, 7
            };
 
-        public static readonly int[] inverseInitialPermutation = new int[64] {
+        public static readonly byte[] inverseInitialPermutation = new byte[64] {
            40, 8, 48, 16, 56, 24, 64, 32,
            39, 7, 47, 15, 55, 23, 63, 31,
            38, 6, 46, 14, 54, 22, 62, 30,
@@ -81,7 +86,7 @@ namespace SecurityLibrary
         19, 13, 30, 6, 22, 11, 4, 25
         };
 
-        private static readonly byte[,,] sboxes = new byte[8, 4, 16]
+        public static readonly byte[,,] sboxes = new byte[8, 4, 16]
         {
 
         {
