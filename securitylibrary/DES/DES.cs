@@ -16,11 +16,18 @@ namespace SecurityLibrary.DES
         public DES()
         {
             _16SubKeys = new List<string>();
-            binaryToHexaMap = new Dictionary<string, char>(); 
+            binaryToHexaMap = new Dictionary<string, char>();
         }
         public override string Decrypt(string cipherText, string key)
         {
-            throw new NotImplementedException();
+            string binaryPlainText = "", left = "", right = "", c = "", d = "";
+            preprocessInput(ref key, ref c, ref d, DESConstants.pc1);
+            generateKeys(ref c, ref d);
+            preprocessInput(ref cipherText, ref left, ref right, DESConstants.initialPermutation);
+            inverseManglerFunction(ref right, ref left);
+            binaryPlainText = right + left;
+            binaryPlainText = permutationChoice(binaryPlainText, DESConstants.inverseInitialPermutation);
+            return binaryToHexa(ref binaryPlainText);
         }
 
         public override string Encrypt(string plainText, string key)
@@ -68,7 +75,10 @@ namespace SecurityLibrary.DES
             StringBuilder hexa = new StringBuilder();
             hexa.Append("0x");
             string substring;
-            getBinaryToHexaMap();
+            if (binaryToHexaMap.Count == 0)
+            {
+                getBinaryToHexaMap();
+            }
             for (int block = 0; block < binaryCipherText.Length; block += 4)
             {
                 substring = binaryCipherText.Substring(block, 4);
@@ -172,7 +182,20 @@ namespace SecurityLibrary.DES
             }
             
         }
-       
         
+        private void inverseManglerFunction(ref string right, ref string left)
+        {
+            string expandedRight, xor, sboxes, permutatedSBoxes, leftXORRight = "";
+            for (int round = 15; round >=0; round--)
+            {
+                expandedRight = permutationChoice(right, DESConstants.expansionTable);
+                xor = XOR(_16SubKeys[round], ref expandedRight);
+                sboxes = sboxReduction(xor);
+                permutatedSBoxes = permutationChoice(sboxes, DESConstants.permutationTable);
+                leftXORRight = XOR(left, ref permutatedSBoxes);
+                left = right;
+                right = leftXORRight;
+            }
+        }
     }
 }
