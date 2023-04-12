@@ -182,7 +182,6 @@ namespace SecurityLibrary.DES
             }
             
         }
-        
         private void inverseManglerFunction(ref string right, ref string left)
         {
             string expandedRight, xor, sboxes, permutatedSBoxes, leftXORRight = "";
