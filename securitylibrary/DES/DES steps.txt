@@ -1,0 +1,29 @@
+Initialization:
+
+On Text:
+- Convert text from hexa to binary 
+- Initial permutation on text
+- Split text to L0 R0
+ 
+On key and subkeys generation:
+- Convert key to hexa to binary
+- Permutation choice 1 on key
+- Split key to C0 D0
+- For itr = 1 to 16
+  shift left on C0 D0 by numberOfLeftShifts[itr]
+  Apply pc2 on the concatenation of C & D (result in 48 bits)
+
+DES Rounds:
+- On the right part
+1. Expansion matrix
+2. Xored with 48-bit subkey
+3. Sbox reduction
+4. permutation
+5. Xored with left
+6. Right = 5
+7. left = right 
+
+Final step:
+1. Swap left with right
+2. Apply inverse permutation choice
+3. Convert to hexadecimal
