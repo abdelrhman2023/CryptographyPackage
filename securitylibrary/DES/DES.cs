@@ -26,21 +26,55 @@ namespace SecurityLibrary.DES
         public override string Encrypt(string plainText, string key)
         {
             string binaryCipherText = "",left="",right="", c="",d="";
-            key = hexaToBinary(ref key);
-            key = permutationChoice(key, DESConstants.pc1);
-            splitString(key, ref c, ref d);
+            preprocessInput(ref key, ref c, ref d, DESConstants.pc1);
             generateKeys(ref c, ref d);
-
-            plainText = hexaToBinary(ref plainText);
-            plainText = permutationChoice(plainText, DESConstants.initialPermutation);
-            // L0 R0
-            splitString(plainText,ref left,ref right);
-
+            preprocessInput(ref plainText, ref left, ref right, DESConstants.initialPermutation);
             manglerFunction(ref right, ref left);
             binaryCipherText = right + left;
             binaryCipherText = permutationChoice(binaryCipherText, DESConstants.inverseInitialPermutation);
 
             return binaryToHexa(ref binaryCipherText);
+        }
+        private void preprocessInput(ref string input, ref string left, ref string right, byte[] permutationChoiceArray)
+        {
+            input = hexaToBinary(ref input);
+            input = permutationChoice(input, permutationChoiceArray);
+            splitString(input, ref left, ref right);
+        }
+        private byte binaryToDecimal(string binary)
+        {
+            byte number = 0;
+            int pow = binary.Length - 1;
+            for (int index = 0; index < binary.Length; index++)
+            {
+                if (binary[index] == '1')
+                {
+                    number += (byte)Math.Pow(2, pow);
+                }
+                pow--;
+            }
+            return number;
+
+        }
+        private void getBinaryToHexaMap()
+        {
+            foreach (KeyValuePair<char, string> pair in DESConstants.hexaToBinaryMap)
+            {
+                binaryToHexaMap.Add(pair.Value, pair.Key);
+            }
+        }
+        private string binaryToHexa(ref string binaryCipherText)
+        {
+            StringBuilder hexa = new StringBuilder();
+            hexa.Append("0x");
+            string substring;
+            getBinaryToHexaMap();
+            for (int block = 0; block < binaryCipherText.Length; block += 4)
+            {
+                substring = binaryCipherText.Substring(block, 4);
+                hexa.Append(binaryToHexaMap[substring]);
+            }
+            return hexa.ToString();
         }
         private string hexaToBinary(ref string text)
         {
@@ -72,7 +106,6 @@ namespace SecurityLibrary.DES
                 right += str[index + size];
             }
         }
-
         private void generateKeys(ref string c, ref string d)
         {
             int index; string subKey;
@@ -81,8 +114,8 @@ namespace SecurityLibrary.DES
                 for (byte leftShift = 1; leftShift <= DESConstants.leftShifts[index]; leftShift++)
                 {
                     c += c[0];
-                    d += d[0];
                     c = c.Remove(0, 1);
+                    d += d[0];
                     d = d.Remove(0, 1);
                 }
                 subKey = c; 
@@ -107,21 +140,23 @@ namespace SecurityLibrary.DES
             }
             return xor.ToString();
         }
-        private byte binaryToDecimal(string binary)
+        private string sboxReduction(string text)
         {
-            byte number = 0;
-            int pow = binary.Length - 1;
-            for (int index = 0; index <binary.Length; index++)
+            StringBuilder sboxOutput32Bit = new StringBuilder();
+            byte row, column, result, sboxIndex = 0;
+            string strRow, strColumn;
+            for (int index = 0; index < text.Length; index += 6)
             {
-                if (binary[index] == '1')
-                {
-                    number += (byte)Math.Pow(2, pow);
-                }
-                pow--;
+                strColumn = text.Substring(index + 1, 4);
+                strRow = text[index] + text[index + 5].ToString();
+                row = binaryToDecimal(strRow);
+                column = binaryToDecimal(strColumn);
+                result = DESConstants.sboxes[sboxIndex, row, column];
+                sboxOutput32Bit.Append(DESConstants.decimalToBinaryMap[result]);
+                sboxIndex++;
             }
-            return number;
-
-        } 
+            return sboxOutput32Bit.ToString();
+        }
         private void manglerFunction(ref string right, ref string left)
         {
             string expandedRight, xor, sboxes, permutatedSBoxes, leftXORRight="";
@@ -137,43 +172,7 @@ namespace SecurityLibrary.DES
             }
             
         }
-        private string sboxReduction(string text)
-        {
-            StringBuilder sboxOutput32Bit = new StringBuilder();
-            byte row, column,result,sboxIndex=0;
-            string strRow,strColumn;
-            for (int index=0;index< text.Length; index += 6)
-            {
-                strColumn = text.Substring(index+1, 4);
-                strRow = text[index] + text[index+5].ToString();
-                row = binaryToDecimal(strRow);
-                column = binaryToDecimal(strColumn);
-                result = DESConstants.sboxes[sboxIndex,row,column];
-                sboxOutput32Bit.Append(DESConstants.decimalToBinaryMap[result]);
-                sboxIndex++;
-            }
-            return sboxOutput32Bit.ToString();
-        }
-
-        private string binaryToHexa(ref string binaryCipherText)
-        {
-            StringBuilder hexa = new StringBuilder();
-            hexa.Append("0x");
-            string substring;
-            getBinaryToHexaMap();
-            for (int block = 0; block < binaryCipherText.Length; block += 4)
-            {
-                substring = binaryCipherText.Substring(block,4);
-                hexa.Append(binaryToHexaMap[substring]);
-            }
-            return hexa.ToString();
-        }
-        private void getBinaryToHexaMap()
-        {
-            foreach (KeyValuePair<char, string> pair in DESConstants.hexaToBinaryMap)
-            {
-                binaryToHexaMap.Add(pair.Value, pair.Key);
-            }
-        }
+       
+        
     }
 }
