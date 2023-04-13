@@ -17,30 +17,34 @@ namespace SecurityLibrary.DES
         {
             _16SubKeys = new List<string>();
             binaryToHexaMap = new Dictionary<string, char>();
+            getBinaryToHexaMap();
         }
         public override string Decrypt(string cipherText, string key)
         {
-            string binaryPlainText = "", left = "", right = "", c = "", d = "";
-            preprocessInput(ref key, ref c, ref d, DESConstants.pc1);
-            generateKeys(ref c, ref d);
-            preprocessInput(ref cipherText, ref left, ref right, DESConstants.initialPermutation);
-            inverseManglerFunction(ref right, ref left);
-            binaryPlainText = right + left;
-            binaryPlainText = permutationChoice(binaryPlainText, DESConstants.inverseInitialPermutation);
-            return binaryToHexa(ref binaryPlainText);
+            return des(ref cipherText, ref key, false);
         }
 
         public override string Encrypt(string plainText, string key)
         {
-            string binaryCipherText = "",left="",right="", c="",d="";
+            return des(ref plainText, ref key, true);
+        }
+        private string des(ref string text,ref string key, bool isEncryption)
+        {
+            string binaryText = "", left = "", right = "", c = "", d = "";
             preprocessInput(ref key, ref c, ref d, DESConstants.pc1);
             generateKeys(ref c, ref d);
-            preprocessInput(ref plainText, ref left, ref right, DESConstants.initialPermutation);
-            manglerFunction(ref right, ref left);
-            binaryCipherText = right + left;
-            binaryCipherText = permutationChoice(binaryCipherText, DESConstants.inverseInitialPermutation);
-
-            return binaryToHexa(ref binaryCipherText);
+            preprocessInput(ref text, ref left, ref right, DESConstants.initialPermutation);
+            if (isEncryption)
+            {
+                manglerFunction(ref right, ref left);
+            }
+            else
+            {
+                inverseManglerFunction(ref right, ref left);
+            }
+            binaryText = right + left;
+            binaryText = permutationChoice(binaryText, DESConstants.inverseInitialPermutation);
+            return binaryToHexa(ref binaryText);
         }
         private void preprocessInput(ref string input, ref string left, ref string right, byte[] permutationChoiceArray)
         {
@@ -75,10 +79,6 @@ namespace SecurityLibrary.DES
             StringBuilder hexa = new StringBuilder();
             hexa.Append("0x");
             string substring;
-            if (binaryToHexaMap.Count == 0)
-            {
-                getBinaryToHexaMap();
-            }
             for (int block = 0; block < binaryCipherText.Length; block += 4)
             {
                 substring = binaryCipherText.Substring(block, 4);
@@ -169,32 +169,29 @@ namespace SecurityLibrary.DES
         }
         private void manglerFunction(ref string right, ref string left)
         {
-            string expandedRight, xor, sboxes, permutatedSBoxes, leftXORRight="";
             for (int round = 0; round < 16; round++)
             {
-                expandedRight = permutationChoice(right, DESConstants.expansionTable);
-                xor = XOR(_16SubKeys[round], ref expandedRight);
-                sboxes = sboxReduction(xor);
-                permutatedSBoxes = permutationChoice(sboxes, DESConstants.permutationTable);
-                leftXORRight = XOR(left, ref permutatedSBoxes);
-                left = right;
-                right = leftXORRight;
+                singleRound(ref left, ref right, _16SubKeys[round]);
             }
             
         }
         private void inverseManglerFunction(ref string right, ref string left)
         {
-            string expandedRight, xor, sboxes, permutatedSBoxes, leftXORRight = "";
             for (int round = 15; round >=0; round--)
             {
-                expandedRight = permutationChoice(right, DESConstants.expansionTable);
-                xor = XOR(_16SubKeys[round], ref expandedRight);
-                sboxes = sboxReduction(xor);
-                permutatedSBoxes = permutationChoice(sboxes, DESConstants.permutationTable);
-                leftXORRight = XOR(left, ref permutatedSBoxes);
-                left = right;
-                right = leftXORRight;
+                singleRound(ref left, ref right,_16SubKeys[round]);
             }
+        }
+        private void singleRound(ref string left, ref string right,string roundSubKey)
+        {
+            string expandedRight, xor, sboxes, permutatedSBoxes, leftXORRight = "";
+            expandedRight = permutationChoice(right, DESConstants.expansionTable);
+            xor = XOR(roundSubKey, ref expandedRight);
+            sboxes = sboxReduction(xor);
+            permutatedSBoxes = permutationChoice(sboxes, DESConstants.permutationTable);
+            leftXORRight = XOR(left, ref permutatedSBoxes);
+            left = right;
+            right = leftXORRight;
         }
     }
 }
