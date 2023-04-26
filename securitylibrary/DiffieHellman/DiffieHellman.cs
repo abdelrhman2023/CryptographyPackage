@@ -7,19 +7,44 @@ using System.Numerics;
 
 namespace SecurityLibrary.DiffieHellman
 {
-    public class DiffieHellman 
+    public class DiffieHellman
     {
         public List<int> GetKeys(int q, int alpha, int xa, int xb)
         {
-            int ya,yb, keyA,keyB;
+            int ya, yb, keyA, keyB;
             ya = fastPower(alpha, xa, q);
             keyB = fastPower(ya, xb, q);
             yb = fastPower(alpha, xb, q);
             keyA = fastPower(yb, xa, q);
-            List<int> keys = new List<int>() { keyA,keyB};
+            List<int> keys = new List<int>() { keyA, keyB };
             return keys;
         }
-        private int fastPower(int baseNum, int exponent,int modulo)
+        public int fastPower(int baseNum, int power, int modulo)
+        {
+            int result = 1;
+            int re = baseNum % modulo;
+
+            for (int i = 0; i < power; i++)
+            {
+
+                result = (result * re) % modulo;
+            }
+
+            return result;
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        /*private int fastPower(int baseNum, int exponent,int modulo)
         {
             if (exponent == 0) return 1;
             if (exponent == 1) return baseNum;
@@ -33,7 +58,11 @@ namespace SecurityLibrary.DiffieHellman
             {
                 return (result * result * baseNum)%modulo;
             }
-        }
+        }*/
+
+
+
+
         /*private int fastPower(int b,int p, int modulo)
         {
             if (p == 0)
