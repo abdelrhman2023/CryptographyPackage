@@ -134,22 +134,7 @@ namespace SecurityLibrary.DES
                 _16SubKeys.Add(subKey);
             }
         }
-        private string XOR (string key,ref string text)
-        {
-           StringBuilder xor = new StringBuilder();
-            for (int index = 0;index < text.Length; index++)
-            {
-                if((text[index] == '1' && key[index] =='0')|| (text[index] == '0' && key[index] == '1'))
-                {
-                    xor.Append('1');
-                }
-                else
-                {
-                    xor.Append('0');
-                }
-            }
-            return xor.ToString();
-        }
+
         private string sboxReduction(string text)
         {
             StringBuilder sboxOutput32Bit = new StringBuilder();
@@ -186,10 +171,10 @@ namespace SecurityLibrary.DES
         {
             string expandedRight, xor, sboxes, permutatedSBoxes, leftXORRight = "";
             expandedRight = permutationChoice(right, DESConstants.expansionTable);
-            xor = XOR(roundSubKey, ref expandedRight);
+            xor = HelperFunctions.XOR(roundSubKey, ref expandedRight);
             sboxes = sboxReduction(xor);
             permutatedSBoxes = permutationChoice(sboxes, DESConstants.permutationTable);
-            leftXORRight = XOR(left, ref permutatedSBoxes);
+            leftXORRight = HelperFunctions.XOR(left, ref permutatedSBoxes);
             left = right;
             right = leftXORRight;
         }

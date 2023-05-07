@@ -18,17 +18,15 @@ namespace SecurityLibrary.ElGamal
         /// <returns>list[0] = C1, List[1] = C2</returns>
         /// 
 
-
-        DiffieHellman.DiffieHellman DH = new DiffieHellman.DiffieHellman();
         AES.ExtendedEuclid inverse = new AES.ExtendedEuclid();
 
         public List<long> Encrypt(int q, int alpha, int y, int k, int m)
         {
             List<long> result = new List<long>();
 
-            long K = DH.fastPower(y, k, q);
+            long K = HelperFunctions.fastPower(y, k, q);
 
-            long C1 = DH.fastPower(alpha,k, q);
+            long C1 = HelperFunctions.fastPower(alpha,k, q);
 
             long C2 = (K * m) % q;
 
@@ -45,7 +43,7 @@ namespace SecurityLibrary.ElGamal
             int result ;
 
 
-            int K = DH.fastPower(c1, x, q);
+            int K = HelperFunctions.fastPower(c1, x, q);
 
             K = inverse.GetMultiplicativeInverse(K, q);
 

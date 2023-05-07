@@ -9,13 +9,12 @@ namespace SecurityLibrary.RSA
     public class RSA
     {
         AES.ExtendedEuclid inverse = new AES.ExtendedEuclid();
-        DiffieHellman.DiffieHellman DH = new DiffieHellman.DiffieHellman();
         public int Encrypt(int p, int q, int M, int e)
         {
             int result ;
             int n = p * q;
             
-            result = DH.fastPower(M,e,n); 
+            result = HelperFunctions.fastPower(M,e,n); 
 
             return result;
 
@@ -29,7 +28,7 @@ namespace SecurityLibrary.RSA
 
             int d = inverse.GetMultiplicativeInverse(e, Qn);
 
-             result = DH.fastPower(C, d, n);
+             result = HelperFunctions.fastPower(C, d, n);
 
 
             return result;

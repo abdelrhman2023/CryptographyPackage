@@ -46,6 +46,7 @@
     <Compile Include="AES\AES.cs" />
     <Compile Include="AES\ExtendedEuclid.cs" />
     <Compile Include="DES\DESConstants.cs" />
+    <Compile Include="HelperFunctions.cs" />
     <Compile Include="ICryptographic_Technique.cs" />
     <Compile Include="CryptographicTechnique.cs" />
     <Compile Include="ElGamal\ELGAMAL.cs" />
