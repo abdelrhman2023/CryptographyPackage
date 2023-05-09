@@ -18,12 +18,23 @@ namespace SecurityLibrary.MD5
         }
         public string GetHash(string text)
         {
+
             return text;
         }
         /*private string processText(ref string text)
         {
             
         }*/
+        private void appendLeastSignificant64Bits(ref StringBuilder text, int originalTextLength)
+        {
+            string binaryLength = Convert.ToString(originalTextLength, 2);
+            int remainingLength = 64 - binaryLength.Length;
+            for (int index = 0;index < remainingLength; index++)
+            {
+                binaryLength.Insert(0, "0");
+            }
+            text.Append(binaryLength);
+        }
         private void padText(ref StringBuilder text)
         {
             if (text.Length < 448)
