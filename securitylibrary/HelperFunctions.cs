@@ -8,6 +8,24 @@ namespace SecurityLibrary
 {
     public static class HelperFunctions
     {
+        public static readonly Dictionary<char, string> hexaToBinaryMap = new Dictionary<char, string> {{'0',"0000"}, { '1', "0001" } ,
+           { '2', "0010" } , { '3', "0011" } , { '4', "0100" },{'5',"0101"},{'6',"0110"},{'7',"0111"},
+           {'8',"1000"},{'9',"1001"},{'A',"1010"},{'B',"1011"},{'C',"1100"},{'D',"1101"},{'E',"1110"},
+           {'F',"1111"}};
+
+        public static readonly Dictionary<byte, string> decimalToBinaryMap = new Dictionary<byte, string> {{0,"0000"}, { 1, "0001" } ,
+           { 2, "0010" } , { 3, "0011" } , { 4, "0100" },{5,"0101"},{6,"0110"},{7,"0111"},
+           {8,"1000"},{9,"1001"},{10,"1010"},{11,"1011"},{12,"1100"},{13,"1101"},{14,"1110"},
+           {15,"1111"}};
+        public static string hexaToBinary(ref string text)
+        {
+            StringBuilder binary = new StringBuilder();
+            for (int index = 2; index < text.Length; index++)
+            {
+                binary.Append(hexaToBinaryMap[text[index]]);
+            }
+            return binary.ToString();
+        }
         public static int fastPower(int baseNum, int power, int modulo)
         {
             int result = 1;

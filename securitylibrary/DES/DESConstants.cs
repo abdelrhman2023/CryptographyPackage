@@ -34,16 +34,6 @@ namespace SecurityLibrary
 
         public static readonly int[] leftShifts = new int[16] { 1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1 };
 
-        public static readonly Dictionary<char, string> hexaToBinaryMap = new Dictionary<char, string> {{'0',"0000"}, { '1', "0001" } , 
-           { '2', "0010" } , { '3', "0011" } , { '4', "0100" },{'5',"0101"},{'6',"0110"},{'7',"0111"},
-           {'8',"1000"},{'9',"1001"},{'A',"1010"},{'B',"1011"},{'C',"1100"},{'D',"1101"},{'E',"1110"},
-           {'F',"1111"}};
-
-        public static readonly Dictionary<byte, string> decimalToBinaryMap = new Dictionary<byte, string> {{0,"0000"}, { 1, "0001" } ,
-           { 2, "0010" } , { 3, "0011" } , { 4, "0100" },{5,"0101"},{6,"0110"},{7,"0111"},
-           {8,"1000"},{9,"1001"},{10,"1010"},{11,"1011"},{12,"1100"},{13,"1101"},{14,"1110"},
-           {15,"1111"}};
-
         public static readonly byte[] initialPermutation = new byte[64] {
            58, 50, 42, 34, 26, 18, 10, 2,
            60, 52, 44, 36, 28, 20, 12, 4,
@@ -146,13 +136,6 @@ namespace SecurityLibrary
         {2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}
         }
 
-        };
-        
-
-       
-
-        
-
-        
+        }; 
     }
 }

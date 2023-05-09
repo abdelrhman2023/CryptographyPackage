@@ -48,7 +48,7 @@ namespace SecurityLibrary.DES
         }
         private void preprocessInput(ref string input, ref string left, ref string right, byte[] permutationChoiceArray)
         {
-            input = hexaToBinary(ref input);
+            input = HelperFunctions.hexaToBinary(ref input);
             input = permutationChoice(input, permutationChoiceArray);
             splitString(input, ref left, ref right);
         }
@@ -69,7 +69,7 @@ namespace SecurityLibrary.DES
         }
         private void getBinaryToHexaMap()
         {
-            foreach (KeyValuePair<char, string> pair in DESConstants.hexaToBinaryMap)
+            foreach (KeyValuePair<char, string> pair in HelperFunctions.hexaToBinaryMap)
             {
                 binaryToHexaMap.Add(pair.Value, pair.Key);
             }
@@ -85,15 +85,6 @@ namespace SecurityLibrary.DES
                 hexa.Append(binaryToHexaMap[substring]);
             }
             return hexa.ToString();
-        }
-        private string hexaToBinary(ref string text)
-        {
-            StringBuilder binary = new StringBuilder();
-            for (int index = 2; index < text.Length; index++)
-            {
-                binary.Append(DESConstants.hexaToBinaryMap[text[index]]);
-            }
-            return binary.ToString();
         }
         private string permutationChoice(string input, byte[] pc)
         {
@@ -147,7 +138,7 @@ namespace SecurityLibrary.DES
                 row = binaryToDecimal(strRow);
                 column = binaryToDecimal(strColumn);
                 result = DESConstants.sboxes[sboxIndex, row, column];
-                sboxOutput32Bit.Append(DESConstants.decimalToBinaryMap[result]);
+                sboxOutput32Bit.Append(HelperFunctions.decimalToBinaryMap[result]);
                 sboxIndex++;
             }
             return sboxOutput32Bit.ToString();
