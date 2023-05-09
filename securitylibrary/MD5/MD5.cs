@@ -55,5 +55,34 @@ namespace SecurityLibrary.MD5
                 tConstants[iteration] = (uint)Math.Floor(Math.Abs(Math.Sin(iteration + 1) * _2Power32));
             }
         }
+        private void F(string b,string c, string d)
+        {
+            string notB, notBAndD, bAndC, or;
+            notB = HelperFunctions.NOT(b);
+            notBAndD = HelperFunctions.AND(notB, d);
+            bAndC = HelperFunctions.AND(b, c);
+            or = HelperFunctions.OR(bAndC,notBAndD);
+        }
+        private void G(string b, string c, string d)
+        {
+            string bAndD, notD, cAndNotD, or;
+            bAndD = HelperFunctions.AND(b, d);
+            notD = HelperFunctions.NOT(d);
+            cAndNotD = HelperFunctions.AND(c,notD);
+            or = HelperFunctions.OR(bAndD,cAndNotD);
+        }
+        private void H(string b, string c, string d)
+        {
+            string bXorC, xor;
+            bXorC = HelperFunctions.XOR(b, ref c);
+            xor = HelperFunctions.XOR(bXorC,ref d);
+        }
+        private void I(string b, string c, string d)
+        {
+            string notD, bOrNotD, xor;
+            notD = HelperFunctions.NOT(d);
+            bOrNotD = HelperFunctions.OR(b, notD);
+            xor = HelperFunctions.XOR(c, ref bOrNotD);
+        }
     }
 }
