@@ -10,9 +10,13 @@ namespace SecurityLibrary.MD5
     {
         private string a,b,c,d;
         uint [] tConstants;
+        uint[,] circularShiftLeft = new uint[4,4]
+        {
+           { 7,12,17,22},{5,9,14,20},{4,11,16,23},{6,10,15,21}
+        };
         public MD5()
         {
-            a = "01234567"; b = "89abcdef"; c = "fedcba98"; d = "76543210";
+            a = "0x01234567"; b = "0x89ABCDEF"; c = "0xFEDCBA98"; d = "0x76543210";
             tConstants = new uint[64];
             calculateTConstants();
         }
@@ -84,5 +88,6 @@ namespace SecurityLibrary.MD5
             bOrNotD = HelperFunctions.OR(b, notD);
             xor = HelperFunctions.XOR(c, ref bOrNotD);
         }
+
     }
 }
