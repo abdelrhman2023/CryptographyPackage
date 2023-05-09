@@ -8,35 +8,41 @@ namespace SecurityLibrary.MD5
 {
     public class MD5
     {
-        private string a = "01234567", b="89abcdef", c="fedcba98", d="76543210";
+        private string a,b,c,d;
+        uint [] tConstants;
+        public MD5()
+        {
+            a = "01234567"; b = "89abcdef"; c = "fedcba98"; d = "76543210";
+            tConstants = new uint[64];
+            calculateTConstants();
+        }
         public string GetHash(string text)
         {
             return text;
         }
-        private string processText(ref string text)
+        /*private string processText(ref string text)
         {
-            byte[] inputBytes = Encoding.ASCII.GetBytes(text);
-            StringBuilder processedText = new StringBuilder();
-            string binaryString;
-            for (int index = 0; index < inputBytes.Length; index++) {
-                binaryString = Convert.ToString(inputBytes[index], 2);
-                while (binaryString.Length != 8) {
-                    binaryString.Insert(0, "0");
-                }
-                processedText.Append(binaryString);
-            }
-            int paddingLength = processedText.Length %512;
-            for (int index = 0; index < paddingLength; index++) {
-                if (index != 0)
+            
+        }*/
+        private void padText(ref StringBuilder text)
+        {
+            if (text.Length < 448)
+            {
+                text.Append("1");
+                int remainingLength = text.Length - 448;
+                for(int index = 0; index < remainingLength; index++)
                 {
-                    processedText.Append("0");
-                }
-                else
-                {
-                    processedText.Append("1");
+                   text.Append("0");
                 }
             }
-            return processedText.ToString();
+        }
+        private void calculateTConstants()
+        {
+            uint _2Power32 = (uint)Math.Pow(2, 32);
+            for (int iteration =0;iteration < 64; iteration++)
+            {
+                tConstants[iteration] = (uint)Math.Floor(Math.Abs(Math.Sin(iteration + 1) * _2Power32));
+            }
         }
     }
 }

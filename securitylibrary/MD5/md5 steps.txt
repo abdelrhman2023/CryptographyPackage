@@ -1,0 +1,14 @@
+text
+1. every character-> ascii, every char in how many bits ? encoding utf? 32? 
+2. padding: 1 -> 448 (msh lazem)
+3. length of text in least significant 64 in binary
+calculate t(i) - > i :1 -> 64
+4. function wahda wahda-> single function
+5. 4 buffers written in little endian
+6. 512 message /32 = 16 block
+awel round sequential
+tany round liha array hadakhal anhy block el awal 
+cls-> circular left shift repeat pattern
+
+use 4 buffers in the last slide
+  
