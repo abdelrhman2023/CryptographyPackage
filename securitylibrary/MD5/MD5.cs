@@ -9,27 +9,20 @@ namespace SecurityLibrary.MD5
     public class MD5
     {
         private string a,b,c,d;
-        uint [] tConstants;
-        uint[,] circularShiftLeft;
         public MD5()
         {
             a = "0x01234567"; b = "0x89ABCDEF"; c = "0xFEDCBA98"; d = "0x76543210";
-            tConstants = new uint[64];
-            calculateTConstants();
-            circularShiftLeft = new uint[4, 4]
-            {
-                { 7,12,17,22},{5,9,14,20},{4,11,16,23},{6,10,15,21}
-            };
         }
         public string GetHash(string text)
         {
 
             return text;
         }
-        /*private string processText(ref string text)
+        private void processText(ref string text)
         {
-            
-        }*/
+            int originalLength = text.Length;
+
+        }
         private void appendLeastSignificant64Bits(ref StringBuilder text, int originalTextLength)
         {
             string binaryLength = Convert.ToString(originalTextLength, 2);
@@ -50,14 +43,6 @@ namespace SecurityLibrary.MD5
                 {
                    text.Append("0");
                 }
-            }
-        }
-        private void calculateTConstants()
-        {
-            uint _2Power32 = (uint)Math.Pow(2, 32);
-            for (int iteration =0;iteration < 64; iteration++)
-            {
-                tConstants[iteration] = (uint)Math.Floor(Math.Abs(Math.Sin(iteration + 1) * _2Power32));
             }
         }
         private void F(string b,string c, string d)
