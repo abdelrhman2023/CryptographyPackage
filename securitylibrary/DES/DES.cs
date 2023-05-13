@@ -74,7 +74,7 @@ namespace SecurityLibrary.DES
                 binaryToHexaMap.Add(pair.Value, pair.Key);
             }
         }
-        private string binaryToHexa(ref string binaryCipherText)
+        public string binaryToHexa(ref string binaryCipherText)
         {
             StringBuilder hexa = new StringBuilder();
             hexa.Append("0x");

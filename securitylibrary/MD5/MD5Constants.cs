@@ -8,18 +8,18 @@ namespace SecurityLibrary.MD5
 {
     internal static class MD5Constants
     {
-        //public static List<string> tContants = new List<string>();
-        public static uint [] tConstants = new uint[64];
-        public static uint[,] circularShiftLeft = new uint[4, 4]
+        public static List<string> tConstants = new List<string>();
+        public static int[,] circularShiftLeft = new int[4, 4]
         {
             { 7,12,17,22},{5,9,14,20},{4,11,16,23},{6,10,15,21}
         };
         public static void calculateTConstants()
         {
-            uint _2Power32 = (uint)Math.Pow(2, 32);
+            int _2Power32 = (int)Math.Pow(2, 32), currentT;
             for (int iteration = 0; iteration < 64; iteration++)
             {
-                tConstants[iteration] = (uint)Math.Floor(Math.Abs(Math.Sin(iteration + 1) * _2Power32));
+                currentT = (int)Math.Floor(Math.Abs(Math.Sin(iteration + 1) * _2Power32));
+                tConstants.Add(Convert.ToString(currentT, 2));
             }
         }
         public static int[,] wordsOrderInIteration = new int[4,16]

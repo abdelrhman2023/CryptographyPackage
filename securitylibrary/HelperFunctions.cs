@@ -56,7 +56,7 @@ namespace SecurityLibrary
             }
             return xor.ToString();
         }
-        public static string AND(string input1, string input2)
+        public static string AND(ref string input1,ref string input2)
         {
             StringBuilder and = new StringBuilder();
             for (int index = 0; index < input1.Length; index++)
@@ -72,7 +72,7 @@ namespace SecurityLibrary
             }
             return and.ToString();
         }
-        public static string OR(string input1, string input2)
+        public static string OR(ref string input1,ref string input2)
         {
             StringBuilder or = new StringBuilder();
             for (int index = 0; index < input1.Length; index++)
@@ -89,7 +89,7 @@ namespace SecurityLibrary
             return or.ToString();
         }
 
-        public static string NOT(string input)
+        public static string NOT(ref string input)
         {
             StringBuilder not = new StringBuilder();
             for (int index = 0; index < input.Length; index++)
@@ -104,6 +104,17 @@ namespace SecurityLibrary
                 }
             }
             return not.ToString();
+        }
+
+        public static string ADD(string binaryStr1, string binaryStr2)
+        {
+            int num1, num2, sum;
+            string binarySum;
+            num1 = Convert.ToInt32(binaryStr1, 2);
+            num2 = Convert.ToInt32(binaryStr2, 2);
+            sum = num1 + num2;
+            binarySum = Convert.ToString(sum, 2);
+            return binarySum;
         }
     }
 }
