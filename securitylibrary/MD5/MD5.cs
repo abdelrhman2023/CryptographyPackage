@@ -8,7 +8,7 @@ namespace SecurityLibrary.MD5
 {
     public class MD5
     {
-        private string a,b,c,d;
+        /*private string a,b,c,d;
         private List<string> _16Words;
         public MD5()
         {
@@ -171,6 +171,29 @@ namespace SecurityLibrary.MD5
             sb.Append(sb.ToString(0, shiftLefts));
             sb.Remove(0, shiftLefts);
             input = sb.ToString();
+        }*/
+        
+        private uint a = 0x67452301, b = 0xEFCDAB89, c = 0x98BADCFE, d = 0x10325476;
+        public string GetHash(string text)
+        {
+
+            return text;
+        }
+        private uint F(ref uint b, ref uint c, ref uint d)
+        {
+            return ((b & c) | ((~b) & d));
+        }
+        private uint G(ref uint b, ref uint c, ref uint d)
+        {
+            return ((b & d) | c & (~d));
+        }
+        private uint H(ref uint b, ref uint c, ref uint d)
+        {
+            return (b ^ c ^ d);
+        }
+        private uint I(ref uint b, ref uint c, ref uint d)
+        {
+            return (c ^ (b | (~d)));
         }
 
     }
