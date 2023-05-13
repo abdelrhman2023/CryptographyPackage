@@ -195,6 +195,31 @@ namespace SecurityLibrary.MD5
         {
             return (c ^ (b | (~d)));
         }
+        private uint circularShiftLeft(ref uint input, ref int shiftAmount)
+        {
+            return (input << shiftAmount) | (input >> (32 - shiftAmount));
+        }
+        private void swap(ref uint a, ref uint b, ref uint c,ref uint d)
+        {
+            uint temp = d;
+            d = c;
+            c = b;
+            b = a;
+            a = temp;
+        }
+        private void singleRound(Func<uint, uint, uint, uint> roundFunction, int shiftLeftAmount,int wordIndex)
+        {
+            uint g, gPlusA, gPlusAPlusX, gPlusAPlusXPlusT, circularShift, circularShiftLeftPlusB;
+            g = roundFunction(b, c, d);
+            gPlusA = g + a;
+            //TODO
+            gPlusAPlusX = gPlusA + 0;
+            gPlusAPlusXPlusT = gPlusAPlusX + 0;
+            circularShift = circularShiftLeft(ref gPlusAPlusXPlusT, 0);
+            circularShiftLeftPlusB = circularShift + b;
+            // END TODO
+            swap(ref a, ref b, ref c, ref d);
+        }
 
     }
 }
