@@ -18,6 +18,10 @@ namespace SecurityLibrary.MD5
         }
         public string GetHash(string text)
         {
+            a = HelperFunctions.hexaToBinary(ref a);
+            b = HelperFunctions.hexaToBinary(ref b);
+            c = HelperFunctions.hexaToBinary(ref c);
+            d = HelperFunctions.hexaToBinary(ref d);
             processText(ref text);
             string g, gAndA, gAndAAndX, t, cls;
             int iteration = 0;
@@ -74,9 +78,10 @@ namespace SecurityLibrary.MD5
             StringBuilder binaryText = getASCIIEncoding(ref text);
             padText(ref binaryText);
             appendLeastSignificant64Bits(ref binaryText, originalLength);
-            for(int index = 0; index < binaryText.Length; index+=32)
+            string updatedBinaryText = binaryText.ToString();
+            for(int index = 0; index < updatedBinaryText.Length; index+=32)
             {
-                _16Words.Add(text.Substring(index, 32));
+                _16Words.Add(updatedBinaryText.Substring(index, 32));
             }
 
             //sb.Append(hashBytes[i].ToString("x2")) -> converts to decimal
@@ -115,7 +120,7 @@ namespace SecurityLibrary.MD5
             int remainingLength = 64 - binaryLength.Length;
             for (int index = 0;index < remainingLength; index++)
             {
-                binaryLength.Insert(0, "0");
+                binaryLength = "0" + binaryLength;
             }
             text.Append(binaryLength);
         }
@@ -162,13 +167,10 @@ namespace SecurityLibrary.MD5
         }
         private void circularShiftLeft(ref string input, int shiftLefts)
         {
-            string mostSignificant;
-            for (int shiftLeft = 0; shiftLeft < shiftLefts; shiftLeft++)
-            {
-                mostSignificant = input[0].ToString();
-                input.Insert(input.Length, mostSignificant);
-                input.Remove(0, 1);
-            }
+            StringBuilder sb = new StringBuilder(input);
+            sb.Append(sb.ToString(0, shiftLefts));
+            sb.Remove(0, shiftLefts);
+            input = sb.ToString();
         }
 
     }
