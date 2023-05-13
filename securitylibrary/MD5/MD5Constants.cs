@@ -9,7 +9,7 @@ namespace SecurityLibrary.MD5
     internal static class MD5Constants
     {
         public static List<string> tConstants = new List<string>();
-        public static List<int> t = new List<int>();
+        public static List<uint> t = new List<uint>();
         public static int[,] circularShiftLeft = new int[4, 4]
         {
             { 7,12,17,22},{5,9,14,20},{4,11,16,23},{6,10,15,21}
@@ -32,10 +32,10 @@ namespace SecurityLibrary.MD5
         };
         public static void calculateT()
         {
-            int _2Power32 = (int)Math.Pow(2, 32), currentT;
+            uint _2Power32 = (uint)Math.Pow(2, 32), currentT;
             for (int iteration = 0; iteration < 64; iteration++)
             {
-                currentT = (int)Math.Floor(Math.Abs(Math.Sin(iteration + 1) * _2Power32));
+                currentT = (uint)Math.Floor(Math.Abs(Math.Sin(iteration + 1) * _2Power32));
                 t.Add(currentT);
             }
         }

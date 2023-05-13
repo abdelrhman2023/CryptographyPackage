@@ -174,6 +174,7 @@ namespace SecurityLibrary.MD5
         }*/
         
         private uint a = 0x67452301, b = 0xEFCDAB89, c = 0x98BADCFE, d = 0x10325476;
+        private List<uint> words = new List<uint>();
         public string GetHash(string text)
         {
 
@@ -207,18 +208,24 @@ namespace SecurityLibrary.MD5
             b = a;
             a = temp;
         }
-        private void singleRound(Func<uint, uint, uint, uint> roundFunction, int shiftLeftAmount,int wordIndex)
+        private void singleRound(Func<uint, uint, uint, uint> roundFunction,ref int shiftLeftAmountRow,ref int wordIndexRow,ref int tConstantIndex)
         {
             uint g, gPlusA, gPlusAPlusX, gPlusAPlusXPlusT, circularShift, circularShiftLeftPlusB;
-            g = roundFunction(b, c, d);
-            gPlusA = g + a;
-            //TODO
-            gPlusAPlusX = gPlusA + 0;
-            gPlusAPlusXPlusT = gPlusAPlusX + 0;
-            circularShift = circularShiftLeft(ref gPlusAPlusXPlusT, 0);
-            circularShiftLeftPlusB = circularShift + b;
-            // END TODO
-            swap(ref a, ref b, ref c, ref d);
+            for (int round = 0; round < 16; round++)
+            {
+                g = roundFunction(b, c, d);
+                gPlusA = g + a;
+                //TODO
+                gPlusAPlusX = gPlusA + words[MD5Constants.wordsOrderInIteration[wordIndexRow,round]];
+                gPlusAPlusXPlusT = gPlusAPlusX + MD5Constants.t[tConstantIndex];
+                tConstantIndex++;
+                circularShift = circularShiftLeft(ref gPlusAPlusXPlusT,ref MD5Constants.circularShiftLeft[shiftLeftAmountRow,round%5]);
+                circularShiftLeftPlusB = circularShift + b;
+                // END TODO
+                swap(ref a, ref b, ref c, ref d);
+            }
+            shiftLeftAmountRow++;
+            wordIndexRow++;
         }
 
     }
