@@ -177,48 +177,67 @@ namespace SecurityLibrary.MD5
         private List<uint> words = new List<uint>();
         public string GetHash(string text)
         {
-            PreprocessMessage(text);
+            preprocessText(ref text);
+            MD5Constants.calculateT();
             int shiftLeftAmountRow = 0, wordIndexRow = 0, tConstantIndex = 0;
             singleRound(F,ref shiftLeftAmountRow,ref wordIndexRow,ref tConstantIndex);
             singleRound(G, ref shiftLeftAmountRow, ref wordIndexRow, ref tConstantIndex);
             singleRound(H, ref shiftLeftAmountRow, ref wordIndexRow, ref tConstantIndex);
             singleRound(I, ref shiftLeftAmountRow, ref wordIndexRow, ref tConstantIndex);
-            return text;
+            StringBuilder output =  new StringBuilder();
+            output.Append(d.ToString("X"));
+            output.Append(c.ToString("X"));
+            output.Append(b.ToString("X"));
+            output.Append(a.ToString("X"));
+            return output.ToString();
         }
-        byte[] PadMessage(byte[] message)
+        private byte[] ToLittleEndian(int value)
         {
-            long messageLengthInBits = message.Length * 8;
-            int paddingLengthInBytes = (448 - (message.Length * 8 + 1) % 512) / 8 + 8;
-            byte[] paddedMessage = new byte[message.Length + paddingLengthInBytes];
-            message.CopyTo(paddedMessage, 0);
-            paddedMessage[message.Length] = 0x80;
-            for (int i = 1; i <= 8; i++)
+            byte[] bytes = BitConverter.GetBytes(value);
+            Array.Reverse(bytes);
+            return bytes;
+        }
+        private void preprocessText(ref string text) 
+        {
+            int index;uint value;
+            string inputSize= Convert.ToString(text.Length,2),binaryTextString,substring;
+            StringBuilder binaryText = new StringBuilder();
+            //TODO-> encoding ?
+            byte[] inputBytes = Encoding.ASCII.GetBytes(text);
+            for (index = 0; index < inputBytes.Length; index++)
             {
-                paddedMessage[paddedMessage.Length - i] = (byte)(messageLengthInBits >> ((i - 1) * 8));
+                binaryText.Append(Convert.ToString(inputBytes[index],2));
             }
-            return paddedMessage;
-        }
-        void PreprocessMessage(string message)
-        {
-            byte[] messageBytes = Encoding.ASCII.GetBytes(message);
-            byte[] paddedMessage = PadMessage(messageBytes);
-            ParseMessageWords(paddedMessage);
-        }
-        void ParseMessageWords(byte[] paddedMessage)
-        {
-            List<uint> messageWords = new List<uint>();
-            for (int i = 0; i < paddedMessage.Length; i += 4)
+            bool isFirst = true;
+            while (binaryText.Length < 448)
             {
-                uint word = 0;
-                for (int j = 0; j < 4; j++)
+                if (!isFirst)
                 {
-                    word |= ((uint)paddedMessage[i + j] << (j * 8));
+                    binaryText.Append("0");
                 }
-                words.Add(word);
+                else
+                {
+                    binaryText.Append("1");
+                    isFirst = false;
+                }
+            }
+            int remainingLength = 64 - inputSize.Length;
+            for (index = 0; index < remainingLength; index++)
+            {
+                binaryText.Append("0");
+            }
+            binaryText.Append(inputSize);
+            binaryTextString = binaryText.ToString();
+            for (index=0;index<binaryText.Length; index+=32)
+            {
+                substring = binaryTextString.Substring(index, 32);
+                value = Convert.ToUInt32(substring,2);
+                words.Add(value);
             }
         }
-    
-    private uint F(uint b, uint c, uint d)
+
+
+        private uint F(uint b, uint c, uint d)
         {
             return ((b & c) | ((~b) & d));
         }
@@ -252,13 +271,13 @@ namespace SecurityLibrary.MD5
             for (int round = 0; round < 16; round++)
             {
                 g = roundFunction(b, c, d);
-                gPlusA = g + a;
+                gPlusA = (uint)(g + a);
                 //TODO
-                gPlusAPlusX = gPlusA + words[MD5Constants.wordsOrderInIteration[wordIndexRow,round]];
-                gPlusAPlusXPlusT = gPlusAPlusX + MD5Constants.t[tConstantIndex];
+                gPlusAPlusX = (uint)(gPlusA + (uint)words[MD5Constants.wordsOrderInIteration[wordIndexRow,round]]);
+                gPlusAPlusXPlusT = (uint)(gPlusAPlusX + MD5Constants.t[tConstantIndex]);
                 tConstantIndex++;
                 circularShift = circularShiftLeft(ref gPlusAPlusXPlusT,ref MD5Constants.circularShiftLeft[shiftLeftAmountRow,round%4]);
-                a = circularShift + b;
+                a = (uint)(circularShift + b);
                 // END TODO
                 swap(ref a, ref b, ref c, ref d);
             }
