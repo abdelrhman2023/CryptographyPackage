@@ -177,9 +177,7 @@ namespace SecurityLibrary.MD5
         private List<uint> words = new List<uint>();
         public string GetHash(string text)
         {
-            byte[] messageBytes = Encoding.ASCII.GetBytes(text);
-            byte[] paddedMessage = PadMessage(messageBytes);
-            ParseMessageWords(paddedMessage);
+            PreprocessMessage(text);
             int shiftLeftAmountRow = 0, wordIndexRow = 0, tConstantIndex = 0;
             singleRound(F,ref shiftLeftAmountRow,ref wordIndexRow,ref tConstantIndex);
             singleRound(G, ref shiftLeftAmountRow, ref wordIndexRow, ref tConstantIndex);
@@ -187,7 +185,7 @@ namespace SecurityLibrary.MD5
             singleRound(I, ref shiftLeftAmountRow, ref wordIndexRow, ref tConstantIndex);
             return text;
         }
-        private byte[] PadMessage(byte[] message)
+        byte[] PadMessage(byte[] message)
         {
             long messageLengthInBits = message.Length * 8;
             int paddingLengthInBytes = (448 - (message.Length * 8 + 1) % 512) / 8 + 8;
@@ -200,11 +198,16 @@ namespace SecurityLibrary.MD5
             }
             return paddedMessage;
         }
-        private void ParseMessageWords(byte[] paddedMessage)
+        void PreprocessMessage(string message)
         {
-            int messageLength = paddedMessage.Length - paddedMessage.Length % 4;
-            MD5Constants.calculateT();
-            for (int i = 0; i < messageLength; i += 4)
+            byte[] messageBytes = Encoding.ASCII.GetBytes(message);
+            byte[] paddedMessage = PadMessage(messageBytes);
+            ParseMessageWords(paddedMessage);
+        }
+        void ParseMessageWords(byte[] paddedMessage)
+        {
+            List<uint> messageWords = new List<uint>();
+            for (int i = 0; i < paddedMessage.Length; i += 4)
             {
                 uint word = 0;
                 for (int j = 0; j < 4; j++)
@@ -214,7 +217,8 @@ namespace SecurityLibrary.MD5
                 words.Add(word);
             }
         }
-        private uint F(uint b, uint c, uint d)
+    
+    private uint F(uint b, uint c, uint d)
         {
             return ((b & c) | ((~b) & d));
         }
