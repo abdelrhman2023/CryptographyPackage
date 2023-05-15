@@ -14,15 +14,7 @@ namespace SecurityLibrary.MD5
         {
             { 7,12,17,22},{5,9,14,20},{4,11,16,23},{6,10,15,21}
         };
-        public static void calculateTConstants()
-        {
-            int _2Power32 = (int)Math.Pow(2, 32), currentT;
-            for (int iteration = 0; iteration < 64; iteration++)
-            {
-                currentT = (int)Math.Floor(Math.Abs(Math.Sin(iteration + 1) * _2Power32));
-                tConstants.Add(Convert.ToString(currentT, 2));
-            }
-        }
+
         public static int[,] wordsOrderInIteration = new int[4,16]
         {
             {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 },

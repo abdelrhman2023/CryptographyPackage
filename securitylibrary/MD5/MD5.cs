@@ -20,17 +20,22 @@ namespace SecurityLibrary.MD5
             singleRound(H, ref shiftLeftAmountRow, ref wordIndexRow, ref tConstantIndex);
             singleRound(I, ref shiftLeftAmountRow, ref wordIndexRow, ref tConstantIndex);
             StringBuilder output =  new StringBuilder();
-            output.Append(d.ToString("X"));
+            /*output.Append(d.ToString("X"));
             output.Append(c.ToString("X"));
             output.Append(b.ToString("X"));
-            output.Append(a.ToString("X"));
-            return output.ToString();
+            output.Append(a.ToString("X"));*/
+            return postPocessText(a,b,c,d);
         }
-        private byte[] ToLittleEndian(int value)
+        private string postPocessText(uint a, uint b, uint c, uint d)
         {
-            byte[] bytes = BitConverter.GetBytes(value);
-            Array.Reverse(bytes);
-            return bytes;
+            byte[] hashBytes = new byte[16];
+            Buffer.BlockCopy(BitConverter.GetBytes(d), 0, hashBytes, 0, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(c), 0, hashBytes, 4, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(b), 0, hashBytes, 8, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(a), 0, hashBytes, 12, 4);
+
+            string hashString = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            return hashString;
         }
         private void preprocessText(ref string text) 
         {
