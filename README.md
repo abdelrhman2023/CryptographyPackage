@@ -1,7 +1,6 @@
 # Cryptography Project
 
-![09f8915a-84a4-4fee-9753-94aa770f7424](https://github.com/abdelrhman2023/CryptographyPackage/assets/68053788/58e78c64-5910-4e5b-aeb1-213782b5e4e5)
-
+![360_F_89973923_0lfduzsXEqiKKGN71ruGQ4kdf0dgnQid](https://github.com/abdelrhman2023/CryptographyPackage/assets/68053788/b67b6cd2-eb9f-4232-9826-cd0a5945d8a8)
 
 Welcome to the Cryptography Project! This project was developed as part of the Computer and Networks Security course at Ain Shams University during the Summer Semester of 2022-2023. Here, you will find a comprehensive collection of classical and advanced cryptography algorithms, as well as a key exchange algorithm, all carefully curated to provide a deeper understanding of encryption and security.
 
